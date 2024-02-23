@@ -1,8 +1,13 @@
-name: husarnet_listener
+name: ${CHATTER_ROLE:-listener}
 services:
-  listener:
+  add_two_ints:
     build: .
-    command: ros2 run demo_nodes_cpp listener
+    restart: unless-stopped
+    command: ros2 run demo_nodes_cpp add_two_ints_${ADD_TWO_INTS_ROLE:-server}
+
+  chatter:
+    build: .
+    command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
 
   ros2router:
     image: husarnet/ros2router:1.9.0
@@ -25,7 +30,7 @@ services:
     devices:
       - /dev/net/tun
     environment:
-      - HOSTNAME=listener-host
+      - HOSTNAME=${CHATTER_ROLE:-listener}-host
       - JOINCODE
       - HUSARNET_DEBUG=1
       - WAIT_HOSTNAMES=talker-host, listener-host
