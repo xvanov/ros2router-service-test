@@ -21,6 +21,7 @@ services:
     volumes:
       - ./filter.yaml:/filter.yaml
     environment:
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
       - PARTICIPANTS=husarnet,if-eth0 # eth0 -is the name of the network interface from a Docker network in the container
 
   husarnet:
