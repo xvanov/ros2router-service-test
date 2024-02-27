@@ -3,10 +3,14 @@ services:
   add_two_ints:
     build: .
     restart: unless-stopped
+    environment:
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
     command: ros2 run demo_nodes_cpp add_two_ints_${ADD_TWO_INTS_ROLE:-server}
 
   chatter:
     build: .
+    environment:
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
     command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
 
   ros2router:
@@ -17,6 +21,7 @@ services:
     volumes:
       - ./filter.yaml:/filter.yaml
     environment:
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
       - PARTICIPANTS=husarnet,if-eth0 # eth0 -is the name of the network interface from a Docker network in the container
 
   husarnet:
