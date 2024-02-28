@@ -1,18 +1,24 @@
 name: operator
 services:
 
-  listener:
+  operator:
     build: .
-    command: ros2 run demo_nodes_cpp listener
-
+    environment:
+      - ROS_DOMAIN_ID=88
+    # interactive mode for this container
+    stdin_open: true
+    tty: true
+  
   ros2router:
     image: husarnet/ros2router:1.9.0
     network_mode: service:husarnet
+    restart: unless-stopped # needed to reset peers list if a new peer is added
     depends_on: 
       husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
     volumes:
       - ./filter.yaml:/filter.yaml
     environment:
+      - ROS_DOMAIN_ID=88
       - EXIT_IF_HOST_TABLE_CHANGED=TRUE 
       - PARTICIPANTS=husarnet,if-eth0 # eth0 -is the name of the network interface from a Docker network in the container
 
@@ -28,6 +34,6 @@ services:
       - /dev/net/tun
     environment:
       - HOSTNAME=operator-host
-      - JOINCODE
-      # - HUSARNET_DEBUG=1
+      - JOINCODE # found in husarnet dashboard, set in .env file in the same directory as this file.
+      - HUSARNET_DEBUG=1
       - WAIT_HOSTNAMES=duke-rpi-host, operator-host
