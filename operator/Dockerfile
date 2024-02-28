@@ -1,4 +1,4 @@
-FROM arm64v8/ros:iron-ros-core
+FROM ros:iron-ros-core
 
 RUN apt update && apt install -y \
         ros-${ROS_DISTRO}-demo-nodes-cpp \
