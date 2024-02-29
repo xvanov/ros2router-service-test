@@ -25,11 +25,14 @@ services:
   ros2router:
     image: husarnet/ros2router:1.6.0
     network_mode: service:husarnet
+    restart: unless-stopped
     depends_on: 
       husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
     volumes:
       - ./filter.yaml:/filter.yaml
     environment:
+      - ROS_LOCALHOST_ONLY=0
+      - EXIT_IF_HOST_TABLE_CHANGED=true
       - PARTICIPANTS=husarnet,if-eth0 # eth0 -is the name of the network interface from a Docker network in the container
 
   husarnet:
