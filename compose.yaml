@@ -9,6 +9,18 @@ services:
     build: .
     command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
 
+  zenoh:
+    image: eclipse/zenoh
+    network_mode: host
+    restart: unless-stopped
+    ports:
+      - 7447:7447
+      - 8000:8000
+    volumes:
+      - ./zenoh_docker:/root/.zenoh
+    environment:
+      - RUST_LOG=debug
+
   ros2router:
     image: husarnet/ros2router:1.9.0
     network_mode: service:husarnet
