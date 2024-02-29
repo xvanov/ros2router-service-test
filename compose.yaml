@@ -10,7 +10,7 @@ services:
   chatter-cyclonedds:
     build: .
     environment:
-      - RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION2}
+      - RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION2:-rmw_cyclonedds_cpp}
     command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
 
   add_two_ints-fastrtps:
