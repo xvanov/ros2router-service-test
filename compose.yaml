@@ -4,22 +4,26 @@ services:
     build: .
     restart: unless-stopped
     environment:
-      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION2}
     command: ros2 run demo_nodes_cpp add_two_ints_${ADD_TWO_INTS_ROLE:-server}
 
   chatter-cyclonedds:
     build: .
     environment:
-      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION2}
     command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
 
   add_two_ints-fastrtps:
     build: .
     restart: unless-stopped
+    environment:
+      - RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION1}
     command: ros2 run demo_nodes_cpp add_two_ints_${ADD_TWO_INTS_ROLE:-server}
   
   chatter-fastrtps:
     build: .
+    environment:
+      - RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION1}
     command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
   
   ros2router:
