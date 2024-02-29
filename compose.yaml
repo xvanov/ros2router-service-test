@@ -14,7 +14,7 @@ services:
     command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
 
   ros2router:
-    image: husarnet/ros2router:1.9.0
+    image: husarnet/ros2router:1.8.0
     network_mode: service:husarnet
     depends_on: 
       husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
