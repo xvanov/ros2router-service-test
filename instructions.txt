@@ -1,0 +1,3 @@
+sudo CHATTER_ROLE=talker ADD_TWO_INTS_ROLE=server docker compose up --build
+
+sudo CHATTER_ROLE=listener ADD_TWO_INTS_ROLE=client docker compose -f ./compose.client.yaml up --build
