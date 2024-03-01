@@ -1,5 +1,13 @@
 name: ${CHATTER_ROLE:-listener}
 services:
+  
+  dev:
+    image: osrf/ros:humble-desktop-full-jammy
+    volumes: 
+      - ${HOME}/rep/dds_bridge:/ros_ws/dds_bridge
+    stdin_open: true
+    tty: true
+  
   add_two_ints-cyclonedds:
     build: .
     restart: unless-stopped
