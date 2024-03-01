@@ -67,3 +67,4 @@ services:
       - HOSTNAME=${CHATTER_ROLE:-listener}-host
       - JOINCODE
       - HUSARNET_DEBUG=1
+      - WAIT_HOSTNAMES=talker-host, listener-host
