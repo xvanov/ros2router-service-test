@@ -1,0 +1,12 @@
+# fastddsgen create msg files
+sudo apt install openjdk-11-jdk
+cd ~
+git clone --recursive https://github.com/eProsima/Fast-DDS-Gen.git
+cd Fast-DDS-Gen
+./gradlew assemble
+
+scripts/fastddsgen /opt/ros/humble/share/geometry_msgs/msg/Twist.idl -I /opt/ros/humble/share/
+# other installs
+apt install -y vim
+apt install -y ros-humble-rmw-cyclonedds-cpp
+
