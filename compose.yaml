@@ -4,7 +4,7 @@ services:
     build: .
     network_mode: host
     environment: 
-      - RMW_IMPLEMENTATION=rmw_cyclonedss_cpp
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
     restart: unless-stopped
     command: ros2 run demo_nodes_cpp add_two_ints_${ADD_TWO_INTS_ROLE:-server}
 
@@ -12,7 +12,7 @@ services:
     build: .
     network_mode: host
     environment: 
-      - RMW_IMPLEMENTATION=rmw_cyclonedss_cpp
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
     command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
 
   zenoh-router:
