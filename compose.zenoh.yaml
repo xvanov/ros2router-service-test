@@ -3,12 +3,16 @@ services:
   add_two_ints:
     build: .
     network_mode: host
+    environment: 
+      - RMW_IMPLEMENTATION=rmw_cyclonedss_cpp
     restart: unless-stopped
     command: ros2 run demo_nodes_cpp add_two_ints_${ADD_TWO_INTS_ROLE:-server}
 
   chatter:
     build: .
     network_mode: host
+    environment: 
+      - RMW_IMPLEMENTATION=rmw_cyclonedss_cpp
     command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
 
   zenoh-router:
@@ -31,4 +35,19 @@ services:
     network_mode: host
     environment:
       - ROS_DISTRO=humble
-    
+   
+  husarnet:
+    image: husarnet/husarnet:2.0.180
+    volumes:
+      - /var/lib/husarnet
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    environment:
+      - HOSTNAME=${CHATTER_ROLE:-listener}-host
+      - JOINCODE
+      # - HUSARNET_DEBUG=1
+      - WAIT_HOSTNAMES=talker-host, listener-host
