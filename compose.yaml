@@ -38,6 +38,7 @@ services:
    
   husarnet:
     image: husarnet/husarnet:2.0.180
+    network_mode: host
     volumes:
       - /var/lib/husarnet
     sysctls:
