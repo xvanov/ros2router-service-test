@@ -1,0 +1,34 @@
+name: ${CHATTER_ROLE:-listener}
+services:
+  add_two_ints:
+    build: .
+    network_mode: host
+    restart: unless-stopped
+    command: ros2 run demo_nodes_cpp add_two_ints_${ADD_TWO_INTS_ROLE:-server}
+
+  chatter:
+    build: .
+    network_mode: host
+    command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
+
+  zenoh-router:
+    build: ./zenoh
+    network_mode: host
+    restart: unless-stopped
+    ports:
+      - 7447:7447
+      - 8000:8000
+    volumes:
+      - ./zenoh_docker:/root/.zenoh
+    environment:
+      - RUST_LOG=debug
+    stdin_open: true    # Keep stdin open
+    tty: true        # Allocate a pseudo-TTY
+    command: zenohd --cfg "adminspace/permissions/write:true"
+  
+  zenoh-dds-bridge:
+    image: eclipse/zenoh-bridge-ros2dds:latest #build: ./zenoh-dds-bridge
+    network_mode: host
+    environment:
+      - ROS_DISTRO=humble
+    
