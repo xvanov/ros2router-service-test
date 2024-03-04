@@ -2,15 +2,21 @@ name: ${CHATTER_ROLE:-listener}
 services:
   add_two_ints:
     build: .
+    network_mode: host
+    environment: 
+      - RMW_IMPLEMENTATION=rmw_cyclonedss_cpp
     restart: unless-stopped
     command: ros2 run demo_nodes_cpp add_two_ints_${ADD_TWO_INTS_ROLE:-server}
 
   chatter:
     build: .
+    network_mode: host
+    environment: 
+      - RMW_IMPLEMENTATION=rmw_cyclonedss_cpp
     command: ros2 run demo_nodes_cpp ${CHATTER_ROLE:-listener}
 
-  zenoh:
-    image: eclipse/zenoh
+  zenoh-router:
+    build: ./zenoh
     network_mode: host
     restart: unless-stopped
     ports:
@@ -20,17 +26,16 @@ services:
       - ./zenoh_docker:/root/.zenoh
     environment:
       - RUST_LOG=debug
-
-  ros2router:
-    image: husarnet/ros2router:1.9.0
-    network_mode: service:husarnet
-    depends_on: 
-      husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
-    volumes:
-      - ./filter.yaml:/filter.yaml
+    stdin_open: true    # Keep stdin open
+    tty: true        # Allocate a pseudo-TTY
+    command: zenohd --cfg "adminspace/permissions/write:true"
+  
+  zenoh-dds-bridge:
+    image: eclipse/zenoh-bridge-ros2dds:latest #build: ./zenoh-dds-bridge
+    network_mode: host
     environment:
-      - PARTICIPANTS=husarnet,if-eth0 # eth0 -is the name of the network interface from a Docker network in the container
-
+      - ROS_DISTRO=humble
+   
   husarnet:
     image: husarnet/husarnet:2.0.180
     volumes:
