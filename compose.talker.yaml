@@ -1,5 +1,6 @@
 name: talker
 services:
+
   add_two_ints:
     build: .
     network_mode: host
@@ -31,7 +32,7 @@ services:
     command: zenohd --cfg "adminspace/permissions/write:true"
   
   zenoh-dds-bridge:
-    image: eclipse/zenoh-bridge-ros2dds:latest #build: ./zenoh-dds-bridge
+    image: eclipse/zenoh-bridge-ros2dds:latest
     network_mode: host
     environment:
       - ROS_DISTRO=humble
@@ -40,7 +41,7 @@ services:
     image: husarnet/husarnet:2.0.180
     network_mode: host
     volumes:
-      - /var/lib/husarnet
+      - /var/lib/husarnet:/var/lib/husarnet
     cap_add:
       - NET_ADMIN
     devices:
