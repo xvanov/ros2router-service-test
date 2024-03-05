@@ -7,6 +7,8 @@ services:
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
     restart: unless-stopped
     command: ros2 run demo_nodes_cpp add_two_ints_server
+    depends_on:
+      husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
 
   chatter:
     build: .
@@ -14,21 +16,11 @@ services:
     environment: 
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
     command: ros2 run demo_nodes_cpp listener
-
-  zenoh-dds-bridge:
-    build: ./zenoh-dds-bridge
-    network_mode: host
-    restart: unless-stopped
-    environment:
-      - ROS_DISTRO=humble
-    stdin_open: true
-    tty: true
-    #command: zenoh-bridge-ros2dds --connect tcp/talker-host:7447
-    depends_on: 
+    depends_on:
       husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
-  
+
   husarnet:
-    image: husarnet/husarnet:2.0.180
+    build: ./zenoh-dds-bridge
     network_mode: host
     volumes:
       - /var/lib/husarnet
@@ -37,7 +29,10 @@ services:
     devices:
       - /dev/net/tun
     environment:
+      - ROS_DISTRO=humble # needed for zenoh-dds-router
       - HOSTNAME=listener-host
       - JOINCODE
-      - HUSARNET_DEBUG=1
       - WAIT_HOSTNAMES=talker-host, listener-host
+      - HUSARNET_DEBUG=1
+    stdin_open: true
+    tty: true
