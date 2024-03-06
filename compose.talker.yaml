@@ -8,6 +8,8 @@ services:
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
     restart: unless-stopped
     command: ros2 run demo_nodes_cpp add_two_ints_client
+    depends_on:
+      husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
 
   chatter:
     build: .
@@ -15,6 +17,8 @@ services:
     environment: 
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
     command: ros2 run demo_nodes_cpp talker
+    depends_on:
+      husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
 
   zenoh-dds-bridge:
     image: eclipse/zenoh-bridge-ros2dds:latest
