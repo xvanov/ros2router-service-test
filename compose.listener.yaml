@@ -20,7 +20,7 @@ services:
       husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
 
   husarnet:
-    build: ./zenoh-dds-bridge
+    build: ./husarnet
     network_mode: host
     volumes:
       - /var/lib/husarnet

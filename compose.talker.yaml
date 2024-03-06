@@ -16,8 +16,16 @@ services:
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
     command: ros2 run demo_nodes_cpp talker
 
+  zenoh-dds-bridge:
+    image: eclipse/zenoh-bridge-ros2dds:latest
+    network_mode: host
+    environment:
+      - ROS_DISTRO=humble
+      - RUST_LOG=info
+      #command: ["--config ./talker-dds-config.json5"]
+
   zenoh-router:
-    build: ./zenoh
+    image: eclipse/zenoh
     network_mode: host
     restart: unless-stopped
     ports:
@@ -27,16 +35,8 @@ services:
       - ./zenoh_docker:/root/.zenoh
     environment:
       - RUST_LOG=debug
-    stdin_open: true
-    tty: true
-    command: zenohd --cfg "adminspace/permissions/write:true"
-  
-  zenoh-dds-bridge:
-    image: eclipse/zenoh-bridge-ros2dds:latest
-    network_mode: host
-    environment:
-      - ROS_DISTRO=humble
-   
+    command: ["--cfg adminspace/permissions/write:true"]
+ 
   husarnet:
     image: husarnet/husarnet:2.0.180
     network_mode: host
