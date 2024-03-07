@@ -20,6 +20,16 @@ services:
     depends_on:
       husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
 
+  zenoh-dds-bridge:
+    image: eclipse/zenoh-bridge-ros2dds:latest 
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - ROS_DISTRO=humble
+    stdin_open: true
+    tty: true
+    depends_on:
+      husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
 
   zenoh-router:
     image: eclipse/zenoh

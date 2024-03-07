@@ -1,9 +1,0 @@
-allowlist:
-  - name: "rt/*"
-  - name: "rq/*"
-  - name: "rr/*"
-  - name: "rs/*"
-  - name: "ra/*"
-  - name: "rp/*"
-blocklist: []
-builtin-topics: []
