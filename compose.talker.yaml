@@ -20,13 +20,6 @@ services:
     depends_on:
       husarnet: { condition: service_healthy } # husarnet service is healthy if all hosts listed in WAIT_HOSTNAMES are reachable
 
-  zenoh-dds-bridge:
-    image: eclipse/zenoh-bridge-ros2dds:latest
-    network_mode: host
-    environment:
-      - ROS_DISTRO=humble
-      - RUST_LOG=info
-      #command: ["--config ./talker-dds-config.json5"]
 
   zenoh-router:
     image: eclipse/zenoh
@@ -37,9 +30,10 @@ services:
       - 8000:8000
     volumes:
       - ./zenoh_docker:/root/.zenoh
+      - ./talker-router-config.json5:/talker-router-config.json5
     environment:
       - RUST_LOG=debug
-    command: ["--cfg adminspace/permissions/write:true"]
+    command: ["--config ./talker-router-config.json5"]
  
   husarnet:
     image: husarnet/husarnet:2.0.180
