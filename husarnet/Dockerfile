@@ -12,6 +12,7 @@ RUN echo "deb [trusted=yes] https://download.eclipse.org/zenoh/debian-repo/ /" |
     apt-get update -y && \
     apt-get install -y zenoh-bridge-ros2dds || true
 
+COPY ./listener-dds-config.json5 /
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

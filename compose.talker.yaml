@@ -30,10 +30,10 @@ services:
       - 8000:8000
     volumes:
       - ./zenoh_docker:/root/.zenoh
-      - ./talker-router-config.json5:/talker-router-config.json5
+      # - ./talker-router-config.json5:/talker-router-config.json5 # if needed
     environment:
       - RUST_LOG=debug
-    command: ["--config ./talker-router-config.json5"]
+    # command: ["--config ./talker-router-config.json5"] # if needed
  
   husarnet:
     image: husarnet/husarnet:2.0.180
